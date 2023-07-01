@@ -1,0 +1,1014 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <!-- index.html -->
+
+  
+
+<style>
+
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    
+}
+
+/* The grid: Three equal columns that floats next to each other */
+.btn {
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+  
+}
+
+.btn:hover {
+  background-color: #ddd;
+}
+.setting{
+   height: 37px;
+    width: 100%;
+    margin-left: 2px;
+    border: 1px solid #ddd;
+}
+.btn.active {
+    background: white;
+    color: #666;
+    border-right:  1px solid#dddddd;
+    border-left: 1px solid #dddddd;
+    border-top:  1px solid #dddddd;
+    border-bottom: 0px solid #666;
+}
+.column {
+   float: left;
+    width: 46%;
+    padding: 16px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    color: #0077ff;
+    border-bottom: 1px solid #dddddd;
+    background: white;
+
+}
+.save_btn{
+      float: left;
+	border: none;
+    outline: none;
+    padding: 11px 12px 6px 11px;
+    color: WHITE;
+    cursor: pointer;
+    border-radius: 6px;
+	}
+.add_btn{
+height: 37px;
+    background: #0077ff;
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+.containerTab {
+margin-top: 24px;
+    color: #666666;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.divide{
+    float: left;
+    width: 43%;
+    padding: 16px;
+    text-align: center;
+}
+
+
+.modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    border: none;
+}
+.modal-footer {
+    padding: 15px;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+    border: none;
+}
+
+#container #videoElement {
+
+  height: 10vh; width: 20v; 
+
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  background-color: black;
+
+}
+
+.videoElement {
+
+  height: 300px;
+    width: 338px;
+    /* margin-left: 17px; */
+    /* margin-right: auto; */
+    display: block;
+    background-color: black;
+}
+
+
+
+.allCameraContainer {
+  display: flex;
+  justify-content: center;
+  float:left;
+  
+  
+}
+
+.screen {
+  width: 338px;
+    display: block;
+    margin-left: 30px;
+    margin-right: 38px;
+}
+.row {
+  margin-right: -33px;
+  margin-left: 14px;
+}
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+.flex-container2 {
+  background-color: #f1f1f1;
+  width: 100px;
+  margin: 10px;
+  text-align: center;
+  line-height: 75px;
+  font-size: 30px;
+}
+</style>
+</head>
+<body>
+</br>
+
+ <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+	
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add Camera</h4>
+        </div>
+		  	<form id="addCamera" action="{{ url_for('add_new_camera') }}" method="post">
+        <div class="modal-body">
+          
+       <label>Camera name:</label>
+	   </br>
+	   <input type="text" placeholder="Camera name"  name="camera_name" class="input_full"></input>
+	    </br> </br>
+		<label>Stream URL(RTSP):</label>
+	   </br>
+	   <input type="text" placeholder="Stream URL" name="stream_url" class="input_full" required></input>
+	     </br> </br>
+		 <label>Snapshot URL:</label>
+	   </br>
+	   <input type="text" placeholder="Snapshot URL" name="snapshot_url" class="input_full"></input>
+	    </br> </br>
+		 <label>Camera credentials:</label>
+	   </br>
+	   <input type="text" placeholder="Username" name="username" class="input_full"></input>
+	   </br></br>
+	    <input type="password" placeholder="Password" name="password" class="input_full"></input>
+        </div>
+        <div class="modal-footer">
+		 <button type="submit"  id="btn2" class=" btn-default save_btn" style="background-color: #0077ff;margin-right:16px">Save</button>
+          <button type="button" class=" btn-default save_btn" data-dismiss="modal"  style="background-color: #666;">Cancel</button>
+        </div>
+		     </form>
+      </div>
+  
+    </div>
+  </div>
+</br>
+</br>
+
+
+<!-- <div style="display: flex;  ">
+  
+{% for index in  camera_ids  %}
+
+  <div id="video-container-{{index}}" class="videoElement">
+    <img src="{{ url_for('video_feed', index=index) }}" />
+  </div>
+  <br>
+{% endfor %}
+</div> -->
+
+<div id="refreshDiv">
+<button type="button" class="add_btn"><i class="fa fa-search" style="font-size:16px;"></i>Camera Search</button>
+<button type="button" class="add_btn" data-toggle="modal" data-target="#myModal" ><i class="material-icons"  style="font-size:16px">add</i><span style="position: relative;">Add camera manually</span></button>
+<br><br>
+<div class="flex-container" >
+  {% for index, name, category, checkedDays, start_time, end_time, alert_status, camPreview in  camera_data  %}
+ 
+  </br></br>
+  <div id="{{index}}" class="screen">
+    <div id="video-container-{{index}}" class="videoElement ">
+      <img src="{{ url_for('video_feed', index=index) }}" />
+    </div>
+</br>
+</br>
+<div><label  style="font-size: 30px; margin-left: 10px">{{ name }}</label></div>
+
+<!---enable disable camera-->
+<form id="cam-form-{{ index }}">
+  {% if camPreview == 1 %}
+  <label class="switch" style="float: right;">
+    <input id="toggle-event-{{ index }}" class="enableDisableRow" type="checkbox" name="camera_checkbox" data-index="{{ index }}" checked>
+    <span class="slider round"></span>
+  </label>
+  <input type="hidden" name="index" value="{{ index }}">
+  {% else %}
+  <label class="switch" style="float: right;">
+    <input id="toggle-event-{{ index }}" class="enableDisableRow" type="checkbox" name="camera_checkbox" data-index="{{ index }}">
+    <span class="slider round"></span>
+  </label>
+  <input type="hidden" name="index" value="{{ index }}">
+  {% endif %}
+</form>
+
+<!---enable disable camera-->
+
+ </br>
+  </br>
+  <div style="  float: right;" id="cam-preview">off/on</div>
+ </br>
+</br>
+<div class="row" >
+  <div class="column btn active"  onclick="openTab1('b1{{index}}'); ">
+  Settings
+  </div>
+  <div class="column btn"  onclick="openTab2('b2{{index}}');">
+   Alert & Action rules
+  </div>
+</div>
+<!-- 1st div -->
+<div  id="b1{{index}}" class="containerTab">
+
+  <div class="divide">
+   <label>Capture Source</label>
+      </br></br></br>    
+    <label>Deep Sight mode</label>
+	 </br></br></br>  
+	 <label>Motion threshold</label>
+	  </br></br></br>  
+	  <label>Alert Status</label>
+	
+	
+</div>
+<div class="divide">
+  <label>Snapshot</label>
+   </br></br></br> 
+   <label><i class="material-icons" style="font-size:24px;color:red">block</i></label>
+     </br></br></br> 
+    <label>30</label>
+        </br></br></br> 
+      </br>
+       <label id="alert-status-{{index}}"> {{ alert_status }}</label>
+            </br></br></br> 
+        
+      
+ </div>
+ <div>
+ 
+  </br></br>
+  <button type="button" class="setting">Edit zone</button>
+  </br></br>
+
+  </div>
+  
+  </div>
+  </br>
+  <!-- 2nd div -->
+  <div id="b2{{index}}" class="containerTab2" style="display : none;">
+    <div style="border: 1px solid #ddd;padding: 38px;">
+    <div>
+
+      <!--object category model toggle button-->
+      <form id="detection-toggle-{{ index }}">
+     <label class="switch">
+      <input  id="toggle-event-person-{{index}}"  class="enableDisableDetect" type="checkbox" name="detectToggle" data-index="{{ index }}"></input>
+     <span class="slider round"></span> <div style="margin-left: 75px; margin-top: -10px;">
+
+      <input type="hidden" name="index" value="{{ index }}">
+      </form>
+
+      <!--object category model toggle button-->
+
+    
+      <!-- index.html -->
+      <!--  <span id="category">{{ category }}</span>  -->
+        
+      <!--  <span id="current-category"></span>  -->
+    
+      <div id="current-category-{{ index }}" style=" text-transform: capitalize; ">{{ category }}</div>
+    
+      <!-- index.html -->
+    
+     </div>
+    </label>
+     </div>
+     </br>
+     <div>
+    <i class="material-icons" style="font-size:31px">watch_later</i>
+     <span id="startToEndTime-{{ index }}" style="margin-left: 40px; font-weight: 400">{{ start_time}} To {{ end_time }}</span>
+     </div>
+     </br>
+     <div>
+     <i class="fa fa-calendar" style="font-size:28px"></i>
+     <span>   </span>
+     <span id="days-list-{{ index }}" style="margin-left: 40px; font-weight: 400;">   {{ checkedDays }} </span>
+     </div>
+     </br>
+     <div>
+     <span></span>
+     </div>
+    </br>
+    <div>
+    
+    <button type="button"  style="float: right;border:none;background:white" onclick="deleterow('{{index}}')"><i class="fa fa-trash" style="font-size: 24px;float: right;color: red;"></i></button>
+    
+    <button type="button" style="float: right;border:none;background:white" data-toggle="modal" data-target="#myModal2-{{index}}"><i class="fa fa-pencil" style="font-size: 24px;margin-right: 33px;color: #0077ff;"></i></button>
+     <div class="modal fade" id="myModal2-{{index}}" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Update rule</h4>
+            <div style="margin-top: 20px;border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;">
+              
+              <!--preview video in settings-->
+              <div id="video-container-{{index}}" class="videoElement">
+                <img src="{{ url_for('video_feed', index=index) }}" />
+              </div>
+       
+            
+            </div>
+          </div>
+          <div class="modal-body">
+            <form id="myForm-{{index}}"  method="post">
+              <input type="hidden" id="index" value="{{ index }}">
+
+              <div class="new_divide">
+                <label>Object</label>
+                </br>
+                <select name="object" id="field1" class="drop">
+                  <option value="person">Person</option>
+                  <option value="tvmonitor">TV Monitor</option>
+                  <option value="bottle">Bottle</option>
+                  <option value="dog">Dog</option>
+                  <option value="cat">Cat</option>
+                  <option value="horse">Horse</option>
+                  <option value="orange">Orange</option>
+                  <option value="elephant">Elephant</option>
+                  <option value="motorbike">Motorbike</option>
+                  <option value="pizza">Pizza</option>
+                  <option value="bicycle">Bicycle</option>
+                  
+                </select>
+                </br></br>
+                <label>Start time</label>
+                </br>
+                <input class="drop" id="field2" type="time" name="start_time"></input>
+              </div>
+              <div class="new_divide">
+                <label>Density control</label>
+                </br>
+                <input class="drop" id="field3" type="input" name="density_control"></input>
+                </br></br>
+                <label>End time</label>
+                </br>
+                <input class="drop" id="field4" type="time" name="end_time"></input>
+              </div>
+              <div>
+                <label>Days of the week</label>
+                </br>
+                <input type="checkbox" id="checkbox1" value="sunday"  name="sunday" class='weekdays'>
+                <label for="sunday" style="margin-right: 24px;"> Sunday</label>
+                <input type="checkbox" id="checkbox2" value="monday"  name="monday" class='weekdays'>
+                <label for="monday" style="margin-right: 24px;"> Monday</label>
+                <input type="checkbox" id="checkbox3" value="tuesday"  name="tuesday" class='weekdays'>
+                <label for="tuesday" style="margin-right: 24px;"> Tuesday</label>
+                <input type="checkbox" id="checkbox4" value="wednesday"  name="wednesday" class='weekdays'>
+                <label for="wednesday" style="margin-right: 24px;">Wednesday</label>
+                <input  type="checkbox" id="checkbox5" value="thrusday"  name="thursday" class='weekdays'>
+                <label for="thrusday"> Thrusday</label></br>
+                <input type="checkbox" id="checkbox6" value="friday"  name="friday" class='weekdays'>
+                <label for="friday" style="margin-right: 24px;"> Friday</label>
+                <input type="checkbox" id="checkbox7" value="saturday"  name="saturday" class='weekdays'>
+                <label for="saturday" style="margin-right: 24px;"> Saturday</label>
+              </div>
+
+              <div style='  margin-top: 20px; '>
+
+
+                <label class="switch" >
+                  <input id="alerts-event-{{ index }}" class="enableAlarm" type="checkbox" name="alerts_checkbox" >
+                <span class="slider round"></span>
+                </label>
+
+                <span style='font-weight: bold;  margin-left: 10px; justify-content: center;'>Alerts</span>
+                
+              </div>
+
+
+              <div class="modal-footer">
+                <button type="submit" id="btn2" class=" btn-default save_btn" style="background-color: #0077ff;margin-right:16px"
+                >Save</button>
+                <button type="button" class="btn-default save_btn" data-dismiss="modal" style="background-color: #666;">Close
+                  {{index}}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      </div>
+    
+    
+  
+    </div>
+    </div>
+    </br>
+    <button type="button" class="setting"><i class="material-icons" style="font-size:24px">add</i><span style="position: absolute;margin-top: 5px;">Add rule</span></button>
+    </br></br>
+    </div>
+    </div>
+  {% endfor %}
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  
+
+  function openTab1(tabName) {
+    var x;
+   x = document.getElementById(tabName);
+  x.style.display="block";
+  var elements = document.getElementsByClassName('containerTab2');
+  console.log(elements)
+  index=document.getElementById(tabName).id;
+  let a =index.split('b1')[1];
+  let text1 = "b2";
+  let text2 = a;
+  let result = text1.concat(text2);
+  for (var i = 0; i < elements.length; i++){
+    console.log( elements[result]);
+    elements[result].style.display = "none";
+      }
+  }
+  function openTab2(tabName) {
+    var y;
+    y = document.getElementById(tabName);
+    y.style.display="block";
+    var elements = document.getElementsByClassName('containerTab');
+    console.log(elements)
+    index=document.getElementById(tabName).id;
+  let a =index.split('b2')[1];
+  let text1 = "b1";
+  let text2 = a;
+  let result = text1.concat(text2);
+  for (var i = 0; i < elements.length; i++){
+    console.log( elements[result]);
+    elements[result].style.display = "none";
+      }
+  }
+
+
+//for changing alert status constantly after 5 seconds
+function updateAlertStatus() {
+  $.ajax({
+      url: '/get_alert_status',
+      type: 'GET',
+      success: function(response) {
+          
+          for (const alert_status of response.alert_statuses) {
+              
+              $('#alert-status-' + alert_status.camera_id).html(alert_status.alert);
+          }
+      },
+      error: function(error) {
+          console.log(error);
+      }
+  });
+}
+
+
+setInterval(updateAlertStatus, 5000);
+
+//for changing alert status constantly after 5 seconds
+
+
+
+
+
+
+//added by Rahul to make selected option accessable in python=========
+document.getElementById("dropdown").addEventListener("change", function() {
+  const selectedOption = this.value;
+  fetch("/handle_dropdown", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ dropdown: selectedOption })
+  });
+});
+
+//added by Rahul to make selected option accessable in python--------
+
+
+//get week days check data ======================
+function getCheckedDays(form) {
+  const checkboxes = form.querySelectorAll('.weekdays');
+  const checkedDays = [];
+
+  for (const checkbox of checkboxes) {
+    if (checkbox.checked) {
+      checkedDays.push(checkbox.name);
+    }
+  }
+
+  return checkedDays;
+}
+
+
+//get week days check data ----------------------------
+
+</script>
+
+
+
+
+</body>
+</html> 
+<style>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color:  #0077ff;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+th{
+	background:#edf0f3;
+}
+
+.new_divide{
+	float: left;
+    width: 50%;
+    padding: 16px;
+}
+</style>
+
+
+
+
+<style>
+  /* The grid: Three equal columns that floats next to each other */
+.btn {
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #ddd;
+}
+.setting{
+   height: 37px;
+    width: 100%;
+    margin-left: 2px;
+    border: 1px solid #ddd;
+}
+.btn.active {
+    background: white;
+    color: #666;
+    border-right:  1px solid#dddddd;
+    border-left: 1px solid #dddddd;
+    border-top:  1px solid #dddddd;
+    border-bottom: 0px solid #666;
+}
+.column {
+   float: left;
+    width: 46%;
+    padding: 16px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    color: #0077ff;
+    border-bottom: 1px solid #dddddd;
+    background: white;
+
+}
+.save_btn{
+      float: left;
+	border: none;
+    outline: none;
+    padding: 11px 12px 6px 11px;
+    color: WHITE;
+    cursor: pointer;
+    border-radius: 6px;
+	}
+.add_btn{
+height: 37px;
+    background: #0077ff;
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+.containerTab {
+margin-top: 24px;
+    color: #666666;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.divide{
+    float: left;
+    width: 43%;
+    padding: 16px;
+    text-align: center;
+}
+.input_full {
+    width: 100%;
+    height: 40px;
+    border-radius: 6px;
+    border: 1px solid #6666;
+	    padding: 10px;
+}
+
+.modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    border: none;
+}
+.modal-footer {
+    padding: 15px;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+    border: none;
+}
+.drop{
+	    width: 100%;
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+	
+}
+.new_divide{
+	float: left;
+    width: 50%;
+    padding: 16px;
+}
+
+.input_full {
+  width: 100%;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid #6666;
+    padding: 10px;
+}
+</style>
+
+
+<script>
+
+  //week
+var b =[];
+function getCheckboxValue() {
+  var values = [];
+  var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+
+  for (var i = 0; i < checkboxes.length; i++) {
+    values.push(checkboxes[i].value);
+  }
+  console.log(values);
+  b = values;
+  
+}
+
+</script>
+
+
+<!--experiment to make end time as required field when start_time is provided-->
+
+<script>
+  const startTimeInput = document.getElementById("field2");
+  const endTimeInput = document.getElementById("field4");
+
+  startTimeInput.addEventListener("input", function () {
+    if (startTimeInput.value) {
+      endTimeInput.setAttribute("required", "required");
+    } else {
+      endTimeInput.removeAttribute("required");
+    }
+  });
+</script>
+
+<!--experiment to make end time as required field when start_time is provided-->
+
+
+<!--to add new camera-->
+<script>
+  $(document).ready(function() {
+    $('#addCamera').on('submit', function(event) {
+      event.preventDefault(); 
+  
+
+      var newCameraData = new FormData(event.target);
+
+      
+      console.log(newCameraData)
+  
+ 
+      $.ajax({
+        url: '{{ url_for("add_new_camera") }}',
+        method: 'POST',
+        data: newCameraData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          $('#myModal').modal('hide'); 
+          //location.reload();
+          refreshDiv();
+     
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          
+          console.error('Error submitting form:', textStatus, errorThrown);
+    
+        }
+      });
+    });
+  });
+  </script>
+  <!--to add new camera-->
+
+
+<!--to get data from setting form-->
+<script>
+  $(document).ready(function() {
+    $('form[id^="myForm-"]').on('submit', function(event) {
+
+      console.log(event);
+      event.preventDefault();
+  
+      var formData = new FormData(event.target);
+      console.log('sdsdfsdf')
+  
+      const checkedDays = getCheckedDays(this);
+      formData.append('checked_days', JSON.stringify(checkedDays));
+  
+      // Appending the index value to FormData
+      var index = $(this).find("#index").val();
+      formData.append('index', index);
+
+
+      //Alert checkbox data
+      var alertsCheckboxElement = $(this).find("input[name='alerts_checkbox']");
+      var alertsCheckboxValue = alertsCheckboxElement.is(':checked') ? 'on' : 'off';
+      formData.append('alerts_checkbox', alertsCheckboxValue);
+
+
+      // Sending the form data to the Flask backend using AJAX
+      var url = '{{ url_for("handle_data") }}';
+
+      console.log(index, "index")
+  
+      $.ajax({
+        url: url,
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          // Handle successful response
+
+          $(`#myModal2-${index}`).modal('hide');
+          $('.modal-backdrop').remove();
+          $(`#current-category-${index}`).html(response.category);
+          $(`#days-list-${index}`).html(response.days);
+
+          $(`#startToEndTime-${index}`).html(response.time);
+          
+          console.log(response.days);
+          console.log(response.time);
+          
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          // Handle error response
+          console.error('Error submitting form:', textStatus, errorThrown);
+        }
+      });
+    });
+  });
+  
+    </script>
+
+    <!--to get data from setting form-->
+
+  
+
+
+    <!--for changing preview state in web cam app-->
+    <script>
+      $(document).ready(function() {
+        $('#refreshDiv').on('change', '.enableDisableRow', function() {
+          var index = $(this).closest('form').find('input[name="index"]').val();
+          var checkbox_value = this.checked;
+          console.log(index)
+          $.ajax({
+            url: "{{ url_for('enable_disable_camera') }}",
+            method: "POST",
+            data: {
+              index: index,
+              camera_checkbox: checkbox_value
+            },
+            success: function(response) {
+              console.log("Form submitted successfully");
+            
+            },
+            error: function(xhr, status, error) {
+              console.error("Error submitting form");
+            }
+          });
+        });
+      });
+      
+    </script>
+    
+    <!--for changing preview state in web cam app-->
+    
+
+     <!--for changing toggle option of detecting or not-->
+     <script>
+      $(document).ready(function() {
+        $('.enableDisableDetect').on('change', function() {
+          var index = $(this).closest('form').find('input[name="index"]').val();
+          var checkbox_value = this.checked;
+          console.log(index)
+          $.ajax({
+            url: "{{ url_for('enable_disable_detection') }}",
+            method: "POST",
+            data: {
+              index: index,
+              detection_checkbox : checkbox_value
+            },
+            success: function(response) {
+              console.log("Form submitted successfully");
+            },
+            error: function(xhr, status, error) {
+              console.error("Error submitting form");
+            }
+          });
+        });
+      });
+      
+    </script>
+
+    <!--for changing toggle option of detecting or not-->
+
+
+
+  <!--for deleting camera-->
+    <script>
+      function deleterow(deleteall) {
+        console.log(deleteall);
+        if (confirm("Are you sure you want to delete ?")) {
+          $.ajax({
+            url: "/delete_camera",
+            type: "POST",
+            data: JSON.stringify({ "index": deleteall }),
+            contentType: "application/json",
+            success: function() {
+              location.reload();
+              
+            }
+          });
+        }
+      }
+      
+    </script>
+
+    <!--for deleting camera-->
+
+
+    <script>
+      function refreshDiv() {
+        // Make an AJAX request to fetch the updated content
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '', true);
+        xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        // Update the content of the div with the response
+        document.getElementById('refreshDiv').innerHTML = xhr.responseText;
+        }
+        };
+        xhr.send();
+        } 
+      
+      //setInterval(refreshDiv, 5000);
+    </script>
